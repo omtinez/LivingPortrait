@@ -3,34 +3,29 @@
 
 # In[1]:
 
-#from IPython.display import display, Image
-#Image('pipeline.png')
-
-
 # ### Shortest Path Between Frames
-# $$S.S.D.: \quad D_{ij}=\sum(F_i-F_j)^2 \quad \forall \: i,j$$
 
 # In[2]:
 
-def imread(impath):
-    ''' Utility function used to read an image into a 2-D array '''
-    color = ndimage.imread(impath, mode='RGB')
-    r, g, b = color[:,:,0], color[:,:,1], color[:,:,2]
-    return (0.2989 * r + 0.5870 * g + 0.1140 * b).astype(np.float)
+def generatingKernel(p):
+    ''' Return a 5x5 generating kernel based on an input parameter. '''
+    kernel = np.array([.25 - p / 2.0, .25, p, .25, .25 - p /2.0])
+    return np.outer(kernel, kernel)
 
-def videoVolume(imfolder):
-    ''' Utility function used to read a series of images into a 3-D array '''
-    imfiles = [f for f in listdir(imfolder) if isfile(join(imfolder,f)) and re.match('.*\.(png)|(jpg)', f.lower())]
-    return [imread(join(imfolder,im)) for im in imfiles]
+def reduce(image):
+    ''' Convolve the input image with a generating kernel of parameter of 0.4 and
+    then reduce its width and height in half. '''
+    return convolve2d(image, generatingKernel(0.3), 'same')[::2,::2]
 
 def SSD(video_volume):
     ''' Compute the sum of squared differences between all pairs of frames in a video volume '''
     output = np.zeros((len(video_volume), len(video_volume)), dtype=np.float)
+    video_volume_blur = [reduce(f).astype(np.float) for f in video_volume]
     for i in range(len(video_volume)):
-        curr_frame = video_volume[i].astype(np.float)
-        for j in range(len(video_volume)):
+        curr_frame = video_volume_blur[i].astype(np.float)
+        for j in range(len(video_volume_blur)):
             if i < j:
-                output[i,j] = ((curr_frame - video_volume[j]) ** 2).sum()
+                output[i,j] = ((curr_frame - video_volume_blur[j]) ** 2).sum()
             elif i > j:
                 output[i,j] = output[j,i]
     return output
@@ -52,8 +47,7 @@ def bestTransitions(ssd_matrix, transitions=100):
     
     return ij, ji, graphix, graphmap
 
-# Solve:
-#
+
 # $$\sum_{ij \in A} w_{ij} x_{ij}$$
 # 
 # Subject to the following constraints:
@@ -97,19 +91,17 @@ def linprogParams(ssd_matrix, ij, ji, graphix, graphmap, s, t):
 # $$\alpha_i = i / n, \quad i \in 1..n$$
 # 
 # $$T_i = \alpha_i \cdot f(F_a) + (1-\alpha_i) \cdot f(F_b)$$
-# 
-# With *f(x)* being a simple Gaussian kernel
 
 # In[5]:
 
-def transitionFrames(frame1, frame2, numFrames=5):
+def transitionFrames(frame1, frame2, numFrames=10):
     ''' Compute transition frames between two given frames '''
     blur1 = gaussian_filter(frame1, sigma=(.1,.1,0), order=0).astype(np.float)
     blur2 = gaussian_filter(frame2, sigma=(.1,.1,0), order=0).astype(np.float)
     blend = lambda alpha: (blur1*alpha + blur2*(1-alpha)).astype(np.uint8)
     return [blend(alpha) for alpha in np.linspace(1,0,numFrames)]
         
-def easeTransitions(frameList, max_insertions=5):
+def easeTransitions(frameList, max_insertions=4):
     ''' Smooth out the worst transitions between consecutive frames '''
     
     for i in range(max_insertions):
@@ -201,17 +193,7 @@ def keyFrameSequence(videoName, framelist, avoidFrames=[], loop=True, transition
 
 # In[7]:
 
-#Image('ui.png', height=400)
-
-
 # ### Other Applications
-# 
-# Combined with other computational photography and computer vision techniques, a number of other applications become available based on this work. For example, adding automatic key frame detection would make an interesting video summarization implementation. With the help of action recognition, the implementation described here can also be used in the process of extracting those actions from raw video. Also, even though computer generated graphics are nowadays virtually indistinguishable form actual footage, the concept of interactive videos can be used in the context of user interfaces such as digital assistants.
-# 
-# 
-# ### Sample Implementation
-# 
-# The code below takes a folder containing all the frames from a portrait video as input, and it outputs all the frame sequences for all the actions occurring at the specified key frames. The resulting frames are then presented in an interactive application ready to use in most updated desktop web browsers at http://omtinez.com/portrait/.
 
 # In[8]:
 
@@ -219,6 +201,7 @@ import numpy as np
 from scipy import ndimage
 from scipy.misc import toimage
 from scipy.optimize import linprog 
+from scipy.signal import convolve2d 
 from scipy.ndimage.filters import gaussian_filter
 
 import re
@@ -226,13 +209,24 @@ import shutil
 from os import listdir, unlink
 from os.path import isfile, join, splitext
 
+def imread(impath):
+    ''' Utility function used to read an image into a 2-D array '''
+    color = ndimage.imread(impath, mode='RGB')
+    r, g, b = color[:,:,0], color[:,:,1], color[:,:,2]
+    return (0.2989 * r + 0.5870 * g + 0.1140 * b).astype(np.float)
+
+def videoVolume(imfolder):
+    ''' Utility function used to read a series of images into a 3-D array '''
+    imfiles = [f for f in listdir(imfolder) if isfile(join(imfolder,f)) and re.match('.*\.(png)|(jpg)', f.lower())]
+    return [imread(join(imfolder,im)) for im in imfiles]
+
 def delOutput():
     for f in [f for f in listdir('out') if isfile(join('out',f))]: unlink(join('out',f))
 
 
-# In[9]:
+# In[ ]:
 
 delOutput()
 videoname = 'face2'
-vidLen = keyFrameSequence(videoname, [0,38,0,178,216,0,109,136])
+vidLen = keyFrameSequence(videoname, [0,38,0,178,200,0,109,136,0,232,260,291])
 
