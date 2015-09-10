@@ -1,57 +1,247 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>Livingportrait by omtinez</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Livingportrait</h1>
-      <h2 class="project-tagline">Demonstration of computational photography techniques to make a live interactive portrait using video textures.</h2>
-      <a href="https://github.com/omtinez/LivingPortrait" class="btn">View on GitHub</a>
-      <a href="https://github.com/omtinez/LivingPortrait/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/omtinez/LivingPortrait/tarball/master" class="btn">Download .tar.gz</a>
+﻿<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="omtinez" />
+    <!--[if IE]>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <![endif]-->
+    <title>Living Portrait</title>
+    <!-- BOOTSTRAP STYLE SHEET -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONT AWESOME ICONS STYLE SHEET -->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <!-- CUSTOM STYLES -->
+    <link href="assets/css/style.css" rel="stylesheet" />
+    <!-- HTML5 Shiv and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+<body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <ul class="nav navbar-nav ">
+                    <li><a href="http://omtinez.com">omtinez.com</a></li>
+                </ul>
+            </div>
+            <div class="navbar-collapse collapse navbar-right scroll-me">
+                <ul class="nav navbar-nav ">
+                    <li><a href="#home">HOME</a></li>
+                    <li><a href="#portrait">PORTRAIT</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <!-- NAVBAR CODE END -->
+    <div id="home" class="player" data-property="{videoURL:'https://www.youtube.com/watch?v=NtgJS6QOZNM',containment:'self',autoPlay:true, mute:true, startAt:0, opacity:1,mute: true,showControls:false}">
+        <div class="overlay">
+            <!-- overylay class usage -->
+            <div class="container">
+                <div class="col-md-8 col-md-offset-2 text-center">
+
+                    <h1>Interactive Video</h1>
+                    <h2>Interactive Video Textures Demonstration</h2>
+                    <p class="p-cls">
+                        In this application, a technique for creating an interactive 
+                        portrait is showcased. The technique is also applicable to the 
+                        creation of many other forms of interactive videos and is based on 
+                        concepts of computational photography and computer vision, including
+                        video textures. Instead of creating a single video texture from a set 
+                        of frames, a set of frame sequences capturing actions is created from 
+                        a series of provided key frames. The algorithm consists in finding 
+                        the best sequence between each individual action and a 
+                        steady-state action, then presenting the result to the user in 
+                        an interactive application.
+                    </p>
+                    <p class="p-cls">
+                        The white paper is available <a href="http://nbviewer.ipython.org/github/omtinez/LivingPortrait/blob/master/LivingPortrait.ipynb">
+                        here</a> in iPython Notebook format or <a href="/portrait/LivingPortrait.pdf">
+                        here</a> as a PDF. All the resources necessary to replicate the results 
+                        can be cloned from <a href="https://github.com/omtinez/LivingPortrait">
+                        this git repository</a>.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!--HOME SECTION END  -->
+    <section id="portrait">
+        <div class="container">
+            <div class="row text-center pad-bottom">
+                <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
+                    <h2 class="head-set">Living Portrait</h2>
+                    <p>
+                        Demonstration of computational photography techniques to make a 
+                        live interactive portrait using video textures.
+                    </p>
+                </div>
+            </div>
+            <div class="row text-center">
+
+                <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
+                    <img style="width:100%; cursor:pointer; margin-bottom:10px" id="viewer" src="assets/img/clickme.png"></img>
+                    <button class="btn btn-default" id="play" onclick="playpause()" disabled="1">Play</button>
+                    <button class="btn btn-default" id="smile" onclick="queueAction(2);queueAction(3);queueAction(4)" disabled="1">Smile</button>
+                    <button class="btn btn-default" id="tongue" onclick="queueAction(5);queueAction(6);queueAction(7)" disabled="1">Tongue</button>
+                    <button class="btn btn-default" id="left" onclick="queueAction(8);queueAction(9);queueAction(10);queueAction(11)" disabled="1">Left</button>
+                </div>
+            </div>
+        </div>
     </section>
+    <!--SERVICES SECTION END  -->
+    <footer>
+        © 2015 omtinez.com  | <a href="http://omtinez.com/" target="_blank">by Oscar Martinez</a>
+    </footer>
+    <!-- FOOTER SECTION END-->
+    <!-- REQUIRED SCRIPTS FILES -->
+    <!-- CORE JQUERY FILE -->
+    <script src="assets/js/jquery-1.11.1.js"></script>
+    <!-- REQUIRED BOOTSTRAP SCRIPTS -->
+    <script src="assets/js/bootstrap.js"></script>
+    <!-- BACKGROUND VIDEO PLUGIN  -->
+    <script src="assets/js/jquery.mb.YTPlayer.js"></script>
+    <!-- SCROLLING SCRIPTS PLUGIN  -->
+    <script src="assets/js/jquery.easing.min.js"></script>
+    <!-- CUSTOM SCRIPTS   -->
+    <script src="assets/js/custom.js"></script>
 
-    <section class="main-content">
-      <h3>
-<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+</body>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here <a href="https://guides.github.com/features/mastering-markdown/">using GitHub Flavored Markdown</a>, select a template crafted by a designer, and publish. After your page is generated, you can check out the new <code>gh-pages</code> branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.</p>
+<style>
+img.CacheImg {
+    display: none;
+}
+</style>
 
-<h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<script>
 
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
+function checkImage (src, pass, fail) {
+    var img = new Image();
+    img.onload = function() { pass(img) }; 
+    img.onerror = fail;
+    img.src = src;
+}
 
-<h3>
-<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating pages manually</h3>
+function preloadFrames (actionNum, frameNum, cacheObj) {
+    var frameStr = 'F' + pad(String(frameNum), 3);
+    var actionStr = 'A' + pad(String(actionNum), 3);
+    var imName = 'out/' + actionStr + '_' + frameStr + '.png';
+    checkImage(imName, function(img) {
+        var node = document.createElement('img');
+        node.id = 'CacheImg' + actionStr + '_' + frameStr;
+        node.className = 'CacheImg';
+        if (console) console.log('Loaded ' + imName);
+        node.src = img.src;
+        document.body.appendChild(node);
+        cacheObj[imName] = node;
+        if (cacheObj['FrameCount']) cacheObj['FrameCount']++;
+        else cacheObj['FrameCount'] = 1 
+        preloadFrames(actionNum, ++frameNum, cacheObj);
+    }, function() {
+        if (frameNum > 0) {
+            cacheObj[actionStr + '_Max'] = frameNum;
+            preloadFrames(++actionNum, 0, cacheObj);
+        } else {
+            return;
+        }
+    });
+}
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+var t = null;
+function playpause () {
+    if (!t) {
+        document.getElementById('play').innerHTML = 'Pause';
+        currFrame = 0, currAction = 0;
+        t = setInterval(function() {
+            if (console) console.log('Playing frame ' + currFrame + ' from action ' + currAction);
+            viewer.src = nextFrame();
+        }, 33);
+    } else {
+        document.getElementById('play').innerHTML = 'Play';
+        clearInterval(t);
+        t = null;
+    }
+}
 
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+var currFrame = 0, currAction = 0, transition = 0;
+var viewer = document.getElementById('viewer');
+function nextFrame () {
+    var frameStr = 'F' + pad(String(currFrame), 3);
+    var actionStr = 'A' + pad(String(currAction), 3);
+    var imName = 'out/' + actionStr + '_' + frameStr + '.png';
+    var nextImg = cacheObj[imName];
+    
+    if (cacheObj[actionStr + '_Max'] <= currFrame + 1) {
+        currFrame = 0;
+        var lastAction = currAction;
+        currAction = nextAction();
+        if (lastAction == 1 && currAction == 0) transition = randInt(50,100);
+    } else if (transition >= 0) {
+        transition--;
+    } else {
+        currFrame++;
+    }
+    
+    return nextImg.src;
+}
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+var pendingActions = [1,0];
+function nextAction () {
+    var a = pendingActions.pop();
+    if (a < 2 && pendingActions[0] != a) pendingActions.unshift(a);
+    return a;
+}
 
-<h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+function queueAction (actionNum) {
+    var ix = pendingActions.lastIndexOf(0) + 1;
+    pendingActions.splice(ix, 0, actionNum);
+    if (transition > 0) {
+        currAction = nextAction();
+        currAction = nextAction();
+        transition = 0;
+    }
+    if (console) console.log(pendingActions);
+}
 
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
+function pad (str, max) {
+    return str.length < max ? pad('0' + str, max) : str;
+}
 
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/omtinez/LivingPortrait">Livingportrait</a> is maintained by <a href="https://github.com/omtinez">omtinez</a>.</span>
+function randInt (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
+cacheObj = {}
+function preload () {
+    document.getElementById('viewer').src = 'assets/img/loading.png';
+    document.getElementById('viewer').onclick = function() {};
+    preloadFrames(0, 0, cacheObj);
+    document.getElementById('viewer').onclick = function() { playpause() };
+    document.getElementById('play').innerHTML = 'Play';
+    document.getElementById('play').disabled = 0;
+    document.getElementById('smile').disabled = 0;
+    document.getElementById('tongue').disabled = 0;
+    document.getElementById('left').disabled = 0;
+    playpause();
+}
 
-    </section>
+document.getElementById('viewer').onclick = function() { preload() };
 
-  
-  </body>
+</script>
+
 </html>
