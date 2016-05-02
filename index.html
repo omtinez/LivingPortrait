@@ -137,7 +137,7 @@ function checkImage (src, pass, fail) {
     img.src = src;
 }
 
-function preloadFrames (actionNum, frameNum, cacheObj) {
+function preloadFrames (actionNum, frameNum, cacheObj, callback) {
     var frameStr = 'F' + pad(String(frameNum), 3);
     var actionStr = 'A' + pad(String(actionNum), 3);
     var imName = 'out/' + actionStr + '_' + frameStr + '.png';
@@ -151,13 +151,13 @@ function preloadFrames (actionNum, frameNum, cacheObj) {
         cacheObj[imName] = node;
         if (cacheObj['FrameCount']) cacheObj['FrameCount']++;
         else cacheObj['FrameCount'] = 1 
-        preloadFrames(actionNum, ++frameNum, cacheObj);
+        preloadFrames(actionNum, ++frameNum, cacheObj, callback);
     }, function() {
         if (frameNum > 0) {
             cacheObj[actionStr + '_Max'] = frameNum;
-            preloadFrames(++actionNum, 0, cacheObj);
+            preloadFrames(++actionNum, 0, cacheObj, callback);
         } else {
-            return;
+            callback();
         }
     });
 }
@@ -230,14 +230,15 @@ cacheObj = {}
 function preload () {
     document.getElementById('viewer').src = 'assets/img/loading.png';
     document.getElementById('viewer').onclick = function() {};
-    preloadFrames(0, 0, cacheObj);
-    document.getElementById('viewer').onclick = function() { playpause() };
-    document.getElementById('play').innerHTML = 'Play';
-    document.getElementById('play').disabled = 0;
-    document.getElementById('smile').disabled = 0;
-    document.getElementById('tongue').disabled = 0;
-    document.getElementById('left').disabled = 0;
-    playpause();
+    preloadFrames(0, 0, cacheObj, function() {
+        document.getElementById('viewer').onclick = function() { playpause() };
+        document.getElementById('play').innerHTML = 'Play';
+        document.getElementById('play').disabled = 0;
+        document.getElementById('smile').disabled = 0;
+        document.getElementById('tongue').disabled = 0;
+        document.getElementById('left').disabled = 0;
+        playpause();
+    });
 }
 
 document.getElementById('viewer').onclick = function() { preload() };
