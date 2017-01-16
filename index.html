@@ -95,7 +95,7 @@
                 <div class="row text-center">
 
                     <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
-                        <span id="loadprogress">Loading action 1...</span>
+                        <span id="loadprogress"></span>
                         <img style="width:100%; cursor:pointer; margin-bottom:10px" id="viewer" src="assets/img/clickme.png"/>
                         <button class="btn btn-default" id="play" onclick="playpause()" disabled="1">Play</button>
                         <button class="btn btn-default" id="smile" onclick="queueAction(2);queueAction(3);queueAction(4)" disabled="1">Smile</button>
@@ -233,6 +233,7 @@
 
         cacheObj = {}
         function preload () {
+            document.querySelector('#loadprogress').innerText = 'Loading action 1...';
             document.getElementById('viewer').src = 'assets/img/loading.png';
             document.getElementById('viewer').onclick = function() {};
             preloadFrames(0, 0, cacheObj, function() {
