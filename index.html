@@ -136,7 +136,6 @@
         function checkImage (src, pass, fail, retry) {
             var img = new Image();
             img.onload = function() { pass(img) }; 
-            //img.onerror = retry ? fail : checkImage(src, pass, fail, true); // Retry loading once
             img.onerror = fail;
             img.src = src;
         }
